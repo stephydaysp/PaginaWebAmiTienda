@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AMI Tienda · Tu negocio en la web</title>
+<style>
+  :root{
+    --beige-100:#fff6dc;
+    --beige-200:#f9edcf;
+    --beige-300:#f5e6c6;
+    --brown-900:#2d241d;
+    --brown-700:#3a2e26;
+    --coral-600:#c44b3c;
+    --coral-700:#a93f33;
+    --cream:#f4ead6;
+    --shadow:0 8px 24px rgba(0,0,0,.15);
+    --radius-2xl:26px;
+
+    /* Espaciados dinámicos (se setean por JS) */
+    --header-offset: 220px; /* fallback por si JS no corre */
+    --header-gap: clamp(12px, 2.8vw, 32px);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--brown-900);
+    background:var(--beige-200);
+    /* Offset real: altura del header fijo + un pequeño gap visual */
+    padding-top: calc(var(--header-offset) + var(--header-gap));
+  }
+
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button{font:inherit}
+  .container{width:min(1100px,92vw);margin-inline:auto}
+
+  /* ===== NAVBAR FIJA ===== */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    background:transparent;
+    width:100%;
+  }
+  /* Fila del navbar con su propio fondo */
+  .nav-bg{
+    background:var(--beige-300);
+    margin:0;
+    padding:0;
+    border-bottom:none;
+  }
+
+  .nav{
+    display:flex;align-items:center;gap:16px;
+    padding:0;
+    position:relative;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.3px}
+  .brand-logo img{width:112px;height:112px;object-fit:contain}
+
+  /* ===== Un solo menú ===== */
+  .navlinks{display:flex;align-items:center;gap:12px;margin-left:8px;flex:1}
+  .navlinks a{
+    padding:8px 12px;border-radius:10px;font-weight:700;
+    color:var(--brown-700);text-align:center;
+    transition:background .2s ease, color .2s ease;
+  }
+  .navlinks a:hover{background:rgba(0,0,0,.06); color:var(--coral-700)}
+
+  .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ead9bc;padding:6px 8px;border-radius:999px}
+  .search input{border:0;outline:0;min-width:180px}
+  .search button{background:#222;color:#fff;border:0;padding:8px 12px;border-radius:999px;font-weight:700}
+  .cta-top{display:none}
+
+  .hamburger{
+    display:none;border:0;background:#fff;border:1px solid #efdfc3;
+    width:42px;height:42px;border-radius:10px;place-items:center;cursor:pointer
+  }
+
+  /* ===== TOLDO ===== */
+  .awning-bar{
+    background:var(--beige-300);
+    line-height:0;
+    pointer-events:none;
+    margin-top:-1px;
+    display:flex;justify-content:center;
+  }
+  .awning-bar img{
+    display:block;
+    width:min(1100px,100%);
+    height:auto;
+    object-fit:cover;
+  }
+
+  @media (max-width:980px){
+    .search{display:none}
+    .cta-top{display:inline-flex;background:var(--coral-600);color:#fff;border:0;padding:10px 12px;border-radius:10px;font-weight:800}
+    .hamburger{display:inline-grid}
+
+    .navlinks{
+      position:absolute; left:0; right:0; top:100%;
+      display:none; flex-direction:column; gap:4px;
+      background:#fff; border:1px solid #ead9bc; border-radius:12px;
+      padding:10px; margin:10px 0 0; box-shadow:var(--shadow); z-index:1001;
+    }
+    .navlinks.open{display:flex}
+    .navlinks a{padding:10px 8px;border-radius:10px}
+    .navlinks a:hover{background:var(--beige-100)}
+  }
+
+  /* ===== Hero ===== */
+  .hero{position:relative; margin-top: 0;} /* la separación ya la da --header-gap */
+  .hero-card{position:relative;background:#17130f;color:#fff;border-radius:var(--radius-2xl);overflow:hidden;box-shadow:var(--shadow)}
+
+  .hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
+  .hero-left{padding:28px;display:flex;flex-direction:column;gap:16px}
+  .headline{font-size:38px;line-height:1.05;font-weight:900}
+  .sub{opacity:.9;margin-top:0}
+  .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:12px 18px;border-radius:14px;font-weight:800;letter-spacing:.2px}
+  .btn-primary{background:var(--coral-600);color:#fff}
+  .btn-primary:hover{background:var(--coral-700)}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}
+  .btn-ghost:hover{border-color:#fff}
+
+  .hero-right{position:relative;padding:28px 0 48px;min-height:380px}
+  .carousel{position:relative;height:100%;overflow:hidden}
+  .carousel-track{display:flex;height:100%;transition:transform .4s ease}
+  .slide{
+    flex:0 0 100%;
+    position:relative;
+    background:#17130f;
+    box-sizing:border-box;
+  }
+  .slide img{width:100%;height:100%;object-fit:contain}
+
+  .carousel-dots{
+    display:flex; gap:8px; justify-content:center;
+    margin-top:16px;
+  }
+  .dot{
+    width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,.4);
+    border:0; padding:0; cursor:pointer; transition: background .2s ease;
+  }
+  .dot.active, .dot:hover{ background:rgba(255,255,255,.9); }
+
+  /* ===== Responsive hero ===== */
+  @media (max-width: 767px) {
+    .hero-grid { 
+      grid-template-columns:1fr; 
+      align-items:start;
+      gap:16px;
+    }
+    .hero-left { padding: 20px 16px 0; }
+    .headline{ font-size:34px; }
+    .hero-right { 
+      order:2;
+      position:static; 
+      min-height:auto;
+      padding:0 16px 20px; 
+    }
+    .carousel, .carousel-track { height: auto; }
+    .slide img { height: auto; object-fit: cover; }
+  }
+
+  /* Secciones */
+  section.content{padding:60px 0}
+  .section-card{background:#fff;border:1px solid #efdfc3;border-radius:18px;box-shadow:var(--shadow);padding:22px}
+  .content h2{
+    margin:0 0 10px;font-size:28px;
+    display:flex; flex-direction:column; line-height:1.1;
+  }
+  .content h2 .highlight{font-size:1.4em; color:var(--coral-600);}
+
+  .section-left .section-title{font-size:16px; font-weight:800; color: var(--brown-700); margin-bottom:4px; text-transform: uppercase; letter-spacing: .5px;}
+  .section-left h2{margin-top:8px;}
+  .section-left p{
+    text-align:justify;
+  }
+
+  .content p{margin:0 0 12px;color:#4b4038}
+
+  /* Layout de 2 columnas para secciones */
+  .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+  .video-container video{width:100%;height:auto;border-radius:16px;display:block}
+
+  @media (max-width: 767px) {
+    .section-grid{grid-template-columns:1fr}
+    .section-right{order:-1; margin-bottom:16px;} /* Video arriba en móvil */
+  }
+
+
+  /* Offset de anclas con header fijo (dinámico) */
+  #web,#correo,#cursos,#proceso,#precios,#equipo{
+    scroll-margin-top: calc(var(--header-offset) + 12px);
+  }
+
+  footer{padding:34px 0 60px;text-align:center;opacity:.8}
+</style>
+</head>
+<body>
+<header>
+  <nav class="navbar" aria-label="Navegación principal y encabezado">
+    <!-- Toldo decorativo -->
+    <div class="awning-bar">
+      <img id="awningImg" src="images/cortina_larga.png" alt="Toldo decorativo"/>
+    </div>
+    <!-- Barra de navegación con fondo -->
+    <div class="nav-bg">
+      <div class="container">
+        <div class="nav">
+          <div class="brand" aria-label="AMI Tienda">
+            <a class="brand-logo" href="/"><img src="images/logo_temporal.png" alt="Logo AMI Tienda"/></a>
+          </div>
+
+          <button id="btnHamburger" class="hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">☰</button>
+
+          <!-- ÚNICO MENÚ -->
+          <div id="navlinks" class="navlinks">
+            <a href="#web">Página Web</a>
+            <a href="#correo">Correo Corporativo</a>
+            <a href="#cursos">Cursos Gratuitos</a>
+            <a href="#proceso">Proceso de Compra</a>
+            <a href="#precios">Nuestros Precios</a>
+            <a href="#equipo">Nuestro Equipo</a>
+          </div>
+
+          <form class="search" role="search" aria-label="Buscar">
+            <input type="search" placeholder="Buscar" aria-label="Buscar en AMI Tienda"/>
+            <button type="submit">Buscar</button>
+          </form>
+
+          <button class="cta-top">Quiero cotizar</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section class="hero container">
+  <div class="hero-card">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <h1 class="headline">Diseñamos tu página web, tu correo corporativo y tu tienda</h1>
+        <p class="sub">Creamos tu presencia digital completa para que vendas y te contacten fácil. Hosting, dominio, correos y diseño a medida.</p>
+        <div class="actions">
+          <button class="btn btn-primary">QUIERO COTIZAR</button>
+        </div>
+        <p style="font-size:12px;opacity:.8">Soporte humano, implementación rápida y asesoría gratuita.</p>
+      </div>
+
+      <div class="hero-right">
+        <div class="carousel" aria-label="Galería de clientes">
+          <div class="carousel-track">
+            <div class="slide"><img src="images/imag1.png"  alt="Imagen de muestra 1"/></div>
+            <div class="slide"><img src="images/imag2.png"  alt="Imagen de muestra 2"/></div>
+            <div class="slide"><img src="images/imag3.png"  alt="Imagen de muestra 3"/></div>
+            <div class="slide"><img src="images/imag4.png"  alt="Imagen de muestra 4"/></div>
+            <div class="slide"><img src="images/imag5.png"  alt="Imagen de muestra 5"/></div>
+            <div class="slide"><img src="images/imag6.png"  alt="Imagen de muestra 6"/></div>
+            <div class="slide"><img src="images/imag7.png"  alt="Imagen de muestra 7"/></div>
+            <div class="slide"><img src="images/imag8.png"  alt="Imagen de muestra 8"/></div>
+            <div class="slide"><img src="images/imag9.png"  alt="Imagen de muestra 9"/></div>
+            <div class="slide"><img src="images/imag10.png" alt="Imagen de muestra 10"/></div>
+            <div class="slide"><img src="images/imag11.png" alt="Imagen de muestra 11"/></div>
+            <div class="slide"><img src="images/imag12.png" alt="Imagen de muestra 12"/></div>
+          </div>
+        </div>
+        <!-- Puntos de navegación (fuera del carrusel para que no se superpongan) -->
+        <div id="carousel-dots" class="carousel-dots"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Secciones de contenido -->
+<section id="web" class="content">
+  <div class="container section-card">
+    <div class="section-grid">
+      <div class="section-left">
+        <h3 class="section-title">Página Web</h3>
+        <h2>
+          <span>Tu negocio necesita</span>
+          <span class="highlight">estar en línea</span>
+        </h2>
+        <p>Una página web bien diseñada es más que una vitrina digital: es la puerta de entrada para que tus clientes confíen en tu marca, encuentren tu oferta y se comuniquen contigo fácilmente. En AMI Tienda te ayudamos a crear un sitio web moderno, seguro y adaptado a tus necesidades, pensado para potenciar tu visibilidad, transmitir confianza y convertir visitantes en clientes.</p>
+      </div>
+      <div class="section-right">
+        <div class="video-container">
+          <video src="/videos/animacion_pagina.mp4" autoplay loop muted playsinline aria-label="Animación de una página web creándose"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="correo" class="content">
+  <div class="container section-card">
+    <div class="section-grid">
+      <div class="section-left">
+        <h2>Tu marca en cada mensaje</h2>
+        <p>Un correo corporativo proyecta profesionalismo y genera confianza inmediata en tus clientes y socios. Con AMI Tienda puedes contar con direcciones de correo personalizadas con el nombre de tu empresa, seguras y fáciles de gestionar. De esta manera, cada mensaje que envíes será una oportunidad para fortalecer tu marca y diferenciarte de la competencia.</p>
+      </div>
+      <div class="section-right">
+        <div class="video-container">
+          <video src="/videos/animacion_correo.mp4" autoplay loop muted playsinline aria-label="Animación de un correo corporativo"></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cursos" class="content">
+  <div class="container section-card">
+    <h2>Cursos Gratuitos</h2>
+    <p>Lista de cursos, tutoriales y material de apoyo.</p>
+  </div>
+</section>
+
+<section id="proceso" class="content">
+  <div class="container section-card">
+    <h2>Proceso de Compra</h2>
+    <p>Paso a paso del onboarding, tiempos y entregables.</p>
+  </div>
+</section>
+
+<section id="precios" class="content">
+  <div class="container section-card">
+    <h2>Nuestros Precios</h2>
+    <p>Tarjetas de pricing y comparativas de planes.</p>
+  </div>
+</section>
+
+<section id="equipo" class="content">
+  <div class="container section-card">
+    <h2>Nuestro Equipo</h2>
+    <p>Presenta a tu equipo, fotos y perfiles.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">© <span id="year"></span> AMI Tienda · Emprender en internet, sin enredos.</div>
+</footer>
+
+<script>
+  // Año footer
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Menú móvil
+  const btn = document.getElementById('btnHamburger');
+  const navlinks = document.getElementById('navlinks');
+  btn?.addEventListener('click',()=>{
+    const isOpen = navlinks.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(isOpen));
+  });
+  navlinks.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=> navlinks.classList.remove('open'));
+  });
+
+  // --- Offset dinámico del header fijo ---
+  const navbarEl = document.querySelector('.navbar');
+  const awningImg = document.getElementById('awningImg');
+
+  function setHeaderOffset(){
+    if(!navbarEl) return;
+    // Altura real del nav (incluye toldo + barra)
+    const headerHeight = Math.round(navbarEl.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--header-offset', headerHeight + 'px');
+  }
+
+  // Recalcular en eventos relevantes
+  window.addEventListener('DOMContentLoaded', setHeaderOffset);
+  window.addEventListener('load', setHeaderOffset);
+  window.addEventListener('resize', setHeaderOffset);
+  awningImg?.addEventListener('load', setHeaderOffset);
+
+  // Carrusel
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(track.children);
+  const dotsContainer = document.getElementById('carousel-dots');
+  let slideWidth = slides[0].offsetWidth;
+  let currentIndex = 0;
+  let autoPlayInterval;
+
+  // Puntos
+  slides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.classList.add('dot');
+    dot.setAttribute('aria-label', `Ir al slide ${index + 1}`);
+    if (index === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
+    dot.addEventListener('click', () => {
+      stopAutoPlay();
+      moveToSlide(index);
+    });
+  });
+  const dots = Array.from(dotsContainer.children);
+
+  function moveToSlide(targetIndex){
+    track.style.transform = 'translateX(-' + (slideWidth * targetIndex) + 'px)';
+    dots[currentIndex].classList.remove('active');
+    dots[targetIndex].classList.add('active');
+    currentIndex = targetIndex;
+  }
+
+  function startAutoPlay() {
+    autoPlayInterval = setInterval(() => {
+      const nextIndex = (currentIndex + 1) % slides.length;
+      moveToSlide(nextIndex);
+    }, 3000);
+  }
+  function stopAutoPlay() { clearInterval(autoPlayInterval); }
+
+  const carousel = document.querySelector('.carousel');
+  carousel.addEventListener('mouseenter', stopAutoPlay);
+  carousel.addEventListener('mouseleave', startAutoPlay);
+  startAutoPlay();
+
+  // Recalcular ancho al redimensionar
+  window.addEventListener('resize', ()=>{
+    slideWidth = slides[0].offsetWidth;
+    moveToSlide(currentIndex);
+  });
+</script>
+</body>
+</html>
