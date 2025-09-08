@@ -11,8 +11,8 @@
     --beige-300:#f5e6c6;
     --brown-900:#2d241d;
     --brown-700:#3a2e26;
-    --coral-600:#c44b3c;
-    --coral-700:#a93f33;
+    --terracotta-600:#AE5632; /* Color corporativo principal */
+    --terracotta-700:#9a4c2c; /* Versión más oscura para hover */
     --cream:#f4ead6;
     --shadow:0 8px 24px rgba(0,0,0,.15);
     --radius-2xl:26px;
@@ -96,7 +96,7 @@
 
   @media (max-width:980px){
     .search{display:none}
-    .cta-top{display:inline-flex;background:var(--coral-600);color:#fff;border:0;padding:10px 12px;border-radius:10px;font-weight:800}
+    .cta-top{display:inline-flex;background:var(--terracotta-600);color:#fff;border:0;padding:10px 12px;border-radius:10px;font-weight:800}
     .hamburger{display:inline-grid}
 
     .navlinks{
@@ -120,8 +120,8 @@
   .sub{opacity:.9;margin-top:0}
   .actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   .btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;padding:12px 18px;border-radius:14px;font-weight:800;letter-spacing:.2px}
-  .btn-primary{background:var(--coral-600);color:#fff}
-  .btn-primary:hover{background:var(--coral-700)}
+  .btn-primary{background:var(--terracotta-600);color:#fff}
+  .btn-primary:hover{background:var(--terracotta-700)}
   .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.25)}
   .btn-ghost:hover{border-color:#fff}
 
@@ -172,7 +172,7 @@
     margin:0 0 10px;font-size:28px;
     display:flex; flex-direction:column; line-height:1.1;
   }
-  .content h2 .highlight{font-size:1.4em; color:var(--coral-600);}
+  .content h2 .highlight{font-size:1.4em; color:var(--terracotta-600);}
 
   .section-left .section-title{font-size:16px; font-weight:800; color: var(--brown-700); margin-bottom:4px; text-transform: uppercase; letter-spacing: .5px;}
   .section-left h2{margin-top:8px;}
@@ -190,6 +190,70 @@
     .section-grid{grid-template-columns:1fr}
     .section-right{order:-1; margin-bottom:16px;} /* Video arriba en móvil */
   }
+
+  /* ===== Pricing Cards ===== */
+  .pricing{padding:60px 0}
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:24px;
+    justify-content:center;
+  }
+  .card{
+    background:var(--beige-100);
+    border:2px solid var(--brown-900);
+    border-radius:20px;
+    padding:24px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    box-shadow: 8px 8px 0px var(--brown-900);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover{ transform: translateY(-4px) translateX(-4px); box-shadow: 12px 12px 0px var(--brown-900); }
+
+  .card--featured{ background:var(--brown-900); color:#fff; box-shadow: 8px 8px 0px var(--terracotta-600); }
+  .card--featured:hover{ box-shadow: 12px 12px 0px var(--terracotta-700); }
+
+  .card__header{ min-height:80px; display:grid; place-content:center; }
+  .card__title{ font-size:24px; line-height:1.1; font-weight:900; margin:0; }
+
+  .price-box{ margin:20px 0; }
+  .price{ font-size:52px; font-weight:900; line-height:1; }
+  .price .currency{ font-size:.5em; vertical-align:super; }
+  .price__note{ font-size:14px; opacity:.8; margin-top:4px; }
+
+  .card__features{
+    list-style:none;
+    padding:0;
+    margin:20px 0;
+    font-size:14px;
+    font-weight:500;
+    color:var(--brown-700);
+    flex-grow:1; /* Ocupa el espacio disponible */
+  }
+  .card--featured .card__features{ color:rgba(255,255,255,.8); }
+
+  .cta{
+    background:var(--brown-900);
+    color:#fff;
+    border:2px solid var(--brown-900);
+    border-radius:12px;
+    padding:14px 20px;
+    font-weight:800;
+    cursor:pointer;
+    margin-top:auto; /* Empuja el botón hacia abajo */
+    transition: background .2s ease, color .2s ease;
+  }
+  .cta:hover{ background:#fff; color:var(--brown-900); }
+
+  .cta--light{
+    background:var(--terracotta-600);
+    border-color:var(--terracotta-600);
+    color:#fff;
+  }
+  .cta--light:hover{ background:var(--terracotta-700); border-color:var(--terracotta-700); }
+
 
 
   /* Offset de anclas con header fijo (dinámico) */
@@ -300,7 +364,11 @@
   <div class="container section-card">
     <div class="section-grid">
       <div class="section-left">
-        <h2>Tu marca en cada mensaje</h2>
+        <h3 class="section-title">Correo Corporativo</h3>
+        <h2>
+          <span>Tu marca en</span>
+          <span class="highlight">cada mensaje</span>
+        </h2>
         <p>Un correo corporativo proyecta profesionalismo y genera confianza inmediata en tus clientes y socios. Con AMI Tienda puedes contar con direcciones de correo personalizadas con el nombre de tu empresa, seguras y fáciles de gestionar. De esta manera, cada mensaje que envíes será una oportunidad para fortalecer tu marca y diferenciarte de la competencia.</p>
       </div>
       <div class="section-right">
@@ -327,10 +395,71 @@
 </section>
 
 <section id="precios" class="content">
-  <div class="container section-card">
-    <h2>Nuestros Precios</h2>
-    <p>Tarjetas de pricing y comparativas de planes.</p>
+  <!-- PRICING / PLANES -->
+  <div class="container section-card" style="padding-bottom: 40px; margin-bottom: -40px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;">
+      <h3 class="section-title">Nuestros Precios</h3>
+      <h2><span>Elige el plan</span><span class="highlight">perfecto para ti</span></h2>
+      <p>Planes transparentes y sin sorpresas. Comienza a construir tu presencia digital hoy mismo.</p>
   </div>
+  <section class="pricing container" aria-label="Planes y precios">
+    <div class="pricing-grid">
+      <!-- Card 1 -->
+      <article class="card">
+        <header class="card__header">
+          <h3 class="card__title">PÁGINA<br/>WEB</h3>
+        </header>
+
+        <div class="price-box">
+          <div class="price"><span class="currency">$</span>77.000</div>
+        </div>
+
+        <ul class="card__features">
+          <li>Incluye Correo Corporativo</li>
+          <li>(5 cuentas)</li>
+        </ul>
+
+        <button class="cta" aria-label="Contratar página web">CONTRATAR</button>
+      </article>
+
+      <!-- Card 2 (Destacada) -->
+      <article class="card card--featured" aria-label="Plan de correo corporativo">
+        <header class="card__header card__header--dark">
+          <h3 class="card__title">CORREO<br/>CORPORATIVO</h3>
+        </header>
+
+        <div class="price-box price-box--light">
+          <div class="price"><span class="currency">$</span>45.000</div>
+          <div class="price__note">/mes</div>
+        </div>
+
+        <ul class="card__features">
+          <li>Incluye 5 cuentas</li>
+        </ul>
+
+        <button class="cta cta--light" aria-label="Contratar correo corporativo">CONTRATAR</button>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card">
+        <header class="card__header">
+          <h3 class="card__title">DISEÑO<br/>DE IMAGEN</h3>
+        </header>
+        <div class="price-box">
+          <div class="price"><span class="currency">$</span>55.000</div>
+        </div>
+
+        <ul class="card__features">
+          <li>Diseño de logo</li>
+          <li>Paleta de colores</li>
+          <li>Eslogan y pie de firma</li>
+          <li>Iconografía</li>
+          <li>Formatos de trabajo</li>
+        </ul>
+
+        <button class="cta" aria-label="Contratar diseño de imagen">CONTRATAR</button>
+      </article>
+    </div>
+  </section>
 </section>
 
 <section id="equipo" class="content">
