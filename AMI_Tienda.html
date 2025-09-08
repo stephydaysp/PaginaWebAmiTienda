@@ -69,10 +69,12 @@
   }
   .navlinks a:hover{background:rgba(0,0,0,.06); color:var(--coral-700)}
 
-  .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #ead9bc;padding:6px 8px;border-radius:999px}
-  .search input{border:0;outline:0;min-width:180px}
-  .search button{background:#222;color:#fff;border:0;padding:8px 12px;border-radius:999px;font-weight:700}
-  .cta-top{display:none}
+  .cta-top{
+    display:inline-flex;background:var(--terracotta-600);color:#fff;
+    border:0;padding:10px 12px;border-radius:10px;font-weight:800;
+    transition: background .2s ease;
+  }
+  .cta-top:hover{background:var(--terracotta-700)}
 
   .hamburger{
     display:none;border:0;background:#fff;border:1px solid #efdfc3;
@@ -95,9 +97,7 @@
   }
 
   @media (max-width:980px){
-    .search{display:none}
-    .cta-top{display:inline-flex;background:var(--terracotta-600);color:#fff;border:0;padding:10px 12px;border-radius:10px;font-weight:800}
-    .hamburger{display:inline-grid}
+    .hamburger{display:inline-grid;margin-left:auto}
 
     .navlinks{
       position:absolute; left:0; right:0; top:100%;
@@ -184,12 +184,54 @@
 
   /* Layout de 2 columnas para secciones */
   .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
-  .video-container video{width:100%;height:auto;border-radius:16px;display:block}
+  .video-container{border-radius:16px;overflow:hidden;line-height:0}
+  .video-container video{width:100%;height:auto;display:block;transform:scale(1.01)}
 
   @media (max-width: 767px) {
     .section-grid{grid-template-columns:1fr}
     .section-right{order:-1; margin-bottom:16px;} /* Video arriba en móvil */
   }
+
+  /* ===== Tabs Component ===== */
+  .tabs-container{
+    margin-top: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: 1px solid #efdfc3;
+  }
+  .tabs-menu{ display: flex; background: var(--terracotta-600); }
+  .tabs-menu button{
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,.85);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    border-right: 1px solid rgba(0,0,0,.1);
+  }
+  .tabs-menu button:last-child{ border-right: none; }
+  .tabs-menu button:hover{ background: var(--terracotta-700); color: #fff; }
+  .tabs-menu button.active{ background: var(--brown-900); color: #fff; }
+  
+  .tabs-content{ padding: 16px 20px; }
+  .tabs-content h4{ margin: 0 0 8px; font-size: 18px; }
+  .tabs-content p{ font-size: 15px; line-height: 1.5; }
+  .tabs-content ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .tabs-content li { margin-bottom: 4px; }
+  .tab-panel{ display: none; animation: fade .4s; }
+  .tab-panel.active{ display: block; }
+  @keyframes fade { from {opacity:0;} to {opacity:1;} }
 
   /* ===== Pricing Cards ===== */
   .pricing{padding:60px 0}
@@ -291,12 +333,7 @@
             <a href="#equipo">Nuestro Equipo</a>
           </div>
 
-          <form class="search" role="search" aria-label="Buscar">
-            <input type="search" placeholder="Buscar" aria-label="Buscar en AMI Tienda"/>
-            <button type="submit">Buscar</button>
-          </form>
-
-          <button class="cta-top">Quiero cotizar</button>
+          <button class="cta-top">QUIERO COTIZAR</button>
         </div>
       </div>
     </div>
@@ -350,6 +387,49 @@
           <span class="highlight">estar en línea</span>
         </h2>
         <p>Una página web bien diseñada es más que una vitrina digital: es la puerta de entrada para que tus clientes confíen en tu marca, encuentren tu oferta y se comuniquen contigo fácilmente. En AMI Tienda te ayudamos a crear un sitio web moderno, seguro y adaptado a tus necesidades, pensado para potenciar tu visibilidad, transmitir confianza y convertir visitantes en clientes.</p>
+        
+        <div class="tabs-container">
+          <div class="tabs-menu">
+            <button class="active" onclick="mostrarTab('tab1', this)">Navbar</button>
+            <button onclick="mostrarTab('tab2', this)">Logo</button>
+            <button onclick="mostrarTab('tab3', this)">Menú</button>
+            <button onclick="mostrarTab('tab4', this)">Botón</button>
+            <button onclick="mostrarTab('tab5', this)">Contenido</button>
+            <button onclick="mostrarTab('tab6', this)">Footer</button>
+          </div>
+          <div class="tabs-content">
+            <div id="tab1" class="tab-panel active">
+              <h4>Navbar Profesional</h4>
+              <p>Tendrá un menú con opciones, fijo en la navegación, imagen de logo y un botón que acciona la descarga de archivos o redirecciona.</p>
+            </div>
+            <div id="tab2" class="tab-panel">
+              <h4>Logo de tu Marca</h4>
+              <p>El cliente debe entregar el logo de su negocio. Si no tiene, lo digitalizamos o sugerimos opciones para avanzar.</p>
+            </div>
+            <div id="tab3" class="tab-panel">
+              <h4>Menú con Opciones</h4>
+              <p>Hasta 6 opciones principales y 3 subopciones opcionales para mayor contenido (productos, servicios, preguntas frecuentes, etc.).</p>
+            </div>
+            <div id="tab4" class="tab-panel">
+              <h4>Botón de Acción</h4>
+              <p>Puedes descargar catálogos, instructivos, abrir contenido exclusivo o redirigir a redes sociales u otras páginas.</p>
+            </div>
+            <div id="tab5" class="tab-panel">
+              <h4>Contenido Principal</h4>
+              <p>Texto descriptivo de tu negocio junto a un carrusel de imágenes (5 a 20 imágenes sugeridas). Más un botón configurable con la acción requerida.</p>
+              <p>Secciones con el contenido de las opciones configuradas, con contenido de texto y material visual, animado según se defina.</p>
+            </div>
+            <div id="tab6" class="tab-panel">
+              <h4>Footer (Pie de página)</h4>
+              <p>Para cerrar tu sitio, el footer incluye:</p>
+              <ul>
+                <li>Datos de contacto principales.</li>
+                <li>Enlaces directos a tus redes sociales.</li>
+                <li>Un botón de acción rápida a WhatsApp o a un formulario de contacto.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="section-right">
         <div class="video-container">
@@ -552,6 +632,20 @@
     slideWidth = slides[0].offsetWidth;
     moveToSlide(currentIndex);
   });
+
+  // --- Tabs ---
+  function mostrarTab(id, boton){
+    // Ocultar todos los paneles de contenido de este contenedor
+    const container = boton.closest('.tabs-container');
+    container.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+    // Mostrar el panel seleccionado
+    container.querySelector('#' + id).classList.add('active');
+
+    // Quitar 'active' de todos los botones del menú
+    container.querySelectorAll('.tabs-menu button').forEach(btn => btn.classList.remove('active'));
+    // Activar el botón actual
+    boton.classList.add('active');
+  }
 </script>
 </body>
 </html>
