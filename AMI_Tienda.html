@@ -306,6 +306,38 @@
   footer{padding:34px 0 60px;text-align:center;opacity:.8}
 </style>
 </head>
+
+<style> /* Estilos para la nueva sección de cursos */
+  .cursos-grid-wrap{width:100%;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  .cursos-grid-wrap h2{margin:0 0 8px;font-size:28px}
+  .cursos-grid-wrap p{margin:0 0 16px;color:#463c34}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .toolbar input,.toolbar select{
+    flex:1 1 220px;padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,.12);background:#fff
+  }
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:620px){.grid{grid-template-columns:1fr}}
+  .grid .card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);overflow:hidden;display:flex;flex-direction:column}
+  .grid .card .body{padding:14px; flex-grow: 1; display: flex; flex-direction: column;}
+  .grid .card h3{margin:0 0 6px;font-size:18px;line-height:1.2}
+  .meta{font-size:12px;color:#5a5149;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{font-size:12px;background:#f5e6c6;border:1px solid rgba(0,0,0,.06);padding:4px 8px;border-radius:999px}
+  .footer-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto; /* Pushes to the bottom */
+    padding-top: 12px; /* Space from content above */
+  }
+  .grid .btn{appearance:none;border:0;border-radius:10px;padding:8px 14px;background:#c44b3c;color:#fff;cursor:pointer;text-decoration:none;text-align:center;flex-shrink:0;transition:transform .06s ease;font-size:14px;font-weight:700}
+  .grid .btn:hover{transform:translateY(-1px)}
+  .grid .btn.secondary{background:#2d241d}
+  .empty{margin-top:14px;padding:12px 14px;border-radius:12px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+</style>
+
 <body>
 <header>
   <nav class="navbar" aria-label="Navegación principal y encabezado">
@@ -327,10 +359,10 @@
           <div id="navlinks" class="navlinks">
             <a href="#web">Página Web</a>
             <a href="#correo">Correo Corporativo</a>
-            <a href="#cursos">Cursos Gratuitos</a>
             <a href="#proceso">Proceso de Compra</a>
             <a href="#precios">Nuestros Precios</a>
             <a href="#equipo">Nuestro Equipo</a>
+            <a href="#cursos">Cursos Gratuitos</a>
           </div>
 
           <button class="cta-top">QUIERO COTIZAR</button>
@@ -460,13 +492,6 @@
   </div>
 </section>
 
-<section id="cursos" class="content">
-  <div class="container section-card">
-    <h2>Cursos Gratuitos</h2>
-    <p>Lista de cursos, tutoriales y material de apoyo.</p>
-  </div>
-</section>
-
 <section id="proceso" class="content">
   <div class="container section-card">
     <h2>Proceso de Compra</h2>
@@ -546,6 +571,38 @@
   <div class="container section-card">
     <h2>Nuestro Equipo</h2>
     <p>Presenta a tu equipo, fotos y perfiles.</p>
+  </div>
+</section>
+
+<section id="cursos" class="content">
+  <div class="container section-card">
+    <section id="cursos-santander-grid" class="cursos-grid-wrap">
+      <h2>Cursos gratuitos • Santander Open Academy</h2>
+      <p>Explora una selección de cursos gratuitos. Al hacer clic, te llevamos al sitio oficial de Santander Open Academy.</p>
+
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Buscar por título, tags, nivel...">
+        <select id="cat">
+          <option value="">Todas las categorías</option>
+          <option>Negocios</option>
+          <option>Tecnología</option>
+          <option>Idiomas</option>
+          <option>Habilidades blandas</option>
+        </select>
+        <select id="sort">
+          <option value="alpha">Ordenar: A–Z</option>
+          <option value="alphaDesc">Ordenar: Z–A</option>
+          <option value="durAsc">Duración: corta a larga</option>
+          <option value="durDesc">Duración: larga a corta</option>
+        </select>
+      </div>
+
+      <div id="grid" class="grid"></div>
+
+      <div id="empty" class="empty" hidden="">
+        No encontramos cursos con esos filtros. Prueba limpiar la búsqueda o cambiar de categoría.
+      </div>
+    </section>
   </div>
 </section>
 
@@ -646,6 +703,118 @@
     // Activar el botón actual
     boton.classList.add('active');
   }
+
+  // --- Cursos Grid ---
+  // 👇 Edita/añade tus cursos favoritos con links oficiales a Open Academy.
+  const CURSOS = [
+    {
+      title: "Introducción a Data Analytics",
+      category: "Tecnología",
+      level: "Inicial",
+      durationH: 8,
+      tags: ["datos","excel","analítica"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#data-analytics"
+    },
+    {
+      title: "Fundamentos de Marketing Digital",
+      category: "Negocios",
+      level: "Inicial",
+      durationH: 10,
+      tags: ["marketing","redes","seo"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#marketing-digital"
+    },
+    {
+      title: "Inglés para el trabajo",
+      category: "Idiomas",
+      level: "Intermedio",
+      durationH: 12,
+      tags: ["inglés","comunicación","laboral"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#ingles"
+    },
+    {
+      title: "Habilidades de Liderazgo",
+      category: "Habilidades blandas",
+      level: "Todos",
+      durationH: 6,
+      tags: ["liderazgo","equipo","comunicación"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#liderazgo"
+    },
+    {
+      title: "Introducción a Programación",
+      category: "Tecnología",
+      level: "Inicial",
+      durationH: 14,
+      tags: ["programación","lógica"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#programacion"
+    },
+    {
+      title: "Emprendimiento y Modelo de Negocio",
+      category: "Negocios",
+      level: "Todos",
+      durationH: 9,
+      tags: ["emprender","lean","canvas"],
+      url: "https://www.santanderopenacademy.com/es/index.html?utm_source=amitienda&utm_medium=web&utm_campaign=cursos#emprendimiento"
+    }
+  ];
+
+  const grid = document.getElementById('grid');
+  const q = document.getElementById('q');
+  const cat = document.getElementById('cat');
+  const sort = document.getElementById('sort');
+  const empty = document.getElementById('empty');
+
+  function render(list){
+    grid.innerHTML = '';
+    if (!list.length){
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+    for (const c of list){
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="body">
+          <h3>${c.title}</h3>
+          <div class="meta">
+            <span>${c.category}</span>
+            <span>•</span>
+            <span>${c.level}</span>
+            <span>•</span>
+            <span>${c.durationH} h</span>
+          </div>
+          <div class="tags">${(c.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="actions">
+          <a class="btn" target="_blank" rel="noopener" href="${c.url}">Ir al curso</a>
+        </div>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  function apply(){
+    const term = (q.value||'').trim().toLowerCase();
+    const catv = cat.value;
+    let list = CURSOS.filter(c=>{
+      const inCat = !catv || c.category === catv;
+      const hay = (c.title + ' ' + (c.tags||[]).join(' ') + ' ' + (c.level||'')).toLowerCase();
+      const inQ = !term || hay.includes(term);
+      return inCat && inQ;
+    });
+    switch(sort.value){
+      case 'alpha': list.sort((a,b)=>a.title.localeCompare(b.title)); break;
+      case 'alphaDesc': list.sort((a,b)=>b.title.localeCompare(a.title)); break;
+      case 'durAsc': list.sort((a,b)=>a.durationH - b.durationH); break;
+      case 'durDesc': list.sort((a,b)=>b.durationH - a.durationH); break;
+    }
+    render(list);
+  }
+
+  q.addEventListener('input', apply);
+  cat.addEventListener('change', apply);
+  sort.addEventListener('change', apply);
+  render(CURSOS);
 </script>
 </body>
 </html>
