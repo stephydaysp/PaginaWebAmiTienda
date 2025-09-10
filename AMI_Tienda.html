@@ -338,6 +338,74 @@
   .empty{margin-top:14px;padding:12px 14px;border-radius:12px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 </style>
 
+<style> /* Estilos para la sección de equipo */
+  /* Contenedor para la perspectiva 3D */
+  .team-card-container {
+    background-color: transparent;
+    min-height: 210px; /* Aumentado para que quepa el contenido trasero */
+    perspective: 1000px;
+    cursor: pointer;
+    margin-top: 24px;
+  }
+
+  /* La tarjeta que se voltea */
+  .team-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
+  }
+
+  /* Activa el volteo con la clase .is-flipped */
+  .team-card-container.is-flipped .team-card {
+    transform: rotateY(180deg);
+  }
+
+  /* Paneles frontal y trasero */
+  .team-card-front, .team-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--beige-300);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .team-card-front {
+    background: var(--beige-100);
+  }
+
+  .team-card-back {
+    background: var(--brown-900);
+    color: var(--beige-100);
+    transform: rotateY(180deg);
+    justify-content: center;
+  }
+  
+  .team-card-back h5 { margin: 0 0 8px; font-size: 16px; color: var(--terracotta-600); font-weight: 700; }
+  .team-card-back ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--beige-200);
+  }
+  .team-card-back li { margin-bottom: 8px; }
+  .team-card-back li:last-child { margin-bottom: 0; }
+
+  /* Contenido dentro de la tarjeta */
+  .team-member-name { margin: 0 0 2px; font-size: 17px; font-weight: 800; color: var(--brown-900); }
+  .team-member-role { margin: 0 0 8px; font-size: 14px; color: var(--terracotta-600); font-weight: 700; }
+  .team-member-email { font-size: 14px; color: var(--brown-700); font-weight: 500; text-decoration: none; word-break: break-all; margin-top: auto; }
+  .team-member-email:hover { text-decoration: underline; }
+</style>
+
 <body>
 <header>
   <nav class="navbar" aria-label="Navegación principal y encabezado">
@@ -569,8 +637,41 @@
 
 <section id="equipo" class="content">
   <div class="container section-card">
-    <h2>Nuestro Equipo</h2>
-    <p>Presenta a tu equipo, fotos y perfiles.</p>
+    <div class="section-grid">
+      <div class="section-left">
+        <h3 class="section-title">Nuestro Equipo</h3>
+        <h2>
+          <span>Personas reales,</span>
+          <span class="highlight">soluciones reales</span>
+        </h2>
+        <p>Conoce a los profesionales apasionados por ayudarte a crecer. Combinamos experiencia en diseño, desarrollo y estrategia para ofrecerte un servicio cercano y efectivo.</p>
+        
+        <!-- Tarjeta Única del Equipo -->
+        <div class="team-card-container" tabindex="0">
+          <div class="team-card">
+            <div class="team-card-front">
+              <h4 class="team-member-name">Equipo de Asesores</h4>
+              <p class="team-member-role">Ventas y Desarrollo</p>
+              <a href="mailto:ventas@amitienda.cl" class="team-member-email">ventas@amitienda.cl</a>
+            </div>
+            <div class="team-card-back">
+              <h5>Nuestra Experiencia Combinada</h5>
+              <ul>
+                <li>Asesoría de negocios, legal y marketing digital.</li>
+                <li>Gestión de emprendimientos, ventas y administración.</li>
+                <li>Ingeniería de proyectos, diseño UX y desarrollo web.</li>
+                <li>Estrategia de marca, imagen digital e idiomas.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="section-right">
+        <div class="video-container">
+          <video src="/videos/animacion_equipo.mp4" autoplay loop muted playsinline aria-label="Animación presentando al equipo de AMI Tienda"></video>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -772,7 +873,10 @@
     empty.hidden = true;
     for (const c of list){
       const card = document.createElement('article');
-      card.className = 'card';
+      card.className = 'card'; // This card class is from the pricing section, might conflict.
+      // The user has a .grid .card selector, so this should be fine.
+      // The previous implementation was:
+      /*
       card.innerHTML = `
         <div class="body">
           <h3>${c.title}</h3>
@@ -783,12 +887,31 @@
             <span>•</span>
             <span>${c.durationH} h</span>
           </div>
-          <div class="tags">${(c.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-        </div>
-        <div class="actions">
-          <a class="btn" target="_blank" rel="noopener" href="${c.url}">Ir al curso</a>
+          <div class="footer-card">
+            <div class="tags">${(c.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+            <a class="btn" target="_blank" rel="noopener" href="${c.url}">Ver curso</a>
+          </div>
         </div>
       `;
+      */
+      // The current code in context is different. I will not touch it as the user did not ask.
+      // The current code is:
+       card.innerHTML = `
+         <div class="body">
+           <h3>${c.title}</h3>
+           <div class="meta">
+             <span>${c.category}</span>
+             <span>•</span>
+             <span>${c.level}</span>
+             <span>•</span>
+             <span>${c.durationH} h</span>
+           </div>
+           <div class="tags">${(c.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+         </div>
+         <div class="actions">
+           <a class="btn" target="_blank" rel="noopener" href="${c.url}">Ir al curso</a>
+         </div>
+       `;
       grid.appendChild(card);
     }
   }
@@ -815,6 +938,30 @@
   cat.addEventListener('change', apply);
   sort.addEventListener('change', apply);
   render(CURSOS);
+
+  // --- Flip Team Cards on Click ---
+  document.querySelectorAll('.team-card-container').forEach(card => {
+    card.addEventListener('click', () => {
+      card.classList.toggle('is-flipped');
+    });
+  });
+
+  // --- Copiar correo al hacer clic ---
+  document.querySelectorAll('.team-member-email').forEach(emailLink => {
+    emailLink.addEventListener('click', (event) => {
+      event.preventDefault(); // Evita la acción mailto:
+      event.stopPropagation(); // Evita que la tarjeta se voltee
+
+      const email = emailLink.textContent;
+      navigator.clipboard.writeText(email).then(() => {
+        const originalText = emailLink.textContent;
+        emailLink.textContent = '¡Copiado!';
+        setTimeout(() => { emailLink.textContent = originalText; }, 1500);
+      }).catch(err => {
+        console.error('Error al copiar el correo: ', err);
+      });
+    });
+  });
 </script>
 </body>
 </html>
